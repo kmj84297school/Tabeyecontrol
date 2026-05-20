@@ -22,6 +22,7 @@ $KOTLINC \
   $SRC/com/example/eyetab/*.kt \
   -classpath "$ANDROID_JAR" \
   -jvm-target 1.8 \
+  -include-runtime \
   -d $OUT/classes.jar 2>&1 | grep -v "^w:" | head -30
 
 echo "=== [2/6] Compiling Resources with aapt2 ==="
@@ -40,6 +41,9 @@ $AAPT2 link \
   --min-sdk-version 26 \
   --target-sdk-version 34 \
   $FLAT_FILES 2>&1 | head -20
+
+echo "=== [3.5/6] Stripping multi-release sections ==="
+zip -d $OUT/classes.jar "META-INF/versions/*" > /dev/null 2>&1 || true
 
 echo "=== [4/6] Converting to DEX ==="
 $DX --dex \
