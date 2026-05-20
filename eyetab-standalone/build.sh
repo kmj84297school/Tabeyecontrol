@@ -37,7 +37,8 @@ $AAPT2 link \
   -o $OUT/resources.apk \
   -I "$ANDROID_JAR" \
   --manifest $MANIFEST \
-  --rename-manifest-package $PKG \
+  --min-sdk-version 26 \
+  --target-sdk-version 34 \
   $FLAT_FILES 2>&1 | head -20
 
 echo "=== [4/6] Converting to DEX ==="
