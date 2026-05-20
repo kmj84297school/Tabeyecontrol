@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EyeTab</string>
+    <string name="accessibility_service_description">눈 깜빡임으로 탭과 스크롤 제스처를 수행합니다.</string>
+</resources>
