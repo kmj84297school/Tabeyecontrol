@@ -15,14 +15,14 @@ OUT="build"
 rm -rf $OUT
 mkdir -p $OUT/res_compiled $OUT/dex $OUT/apk $OUT/gen $OUT/r_classes
 
-echo "=== [1/7] Compiling Resources with aapt2 ==="
+echo "=== [1/7] Compiling Resources ==="
 find $RES \( -name "*.xml" -o -name "*.png" \) | while read f; do
-  echo "  Compiling: $f"
+  echo "  $f"
   $AAPT2 compile "$f" -o $OUT/res_compiled/ 2>&1
 done
 echo "Flat files: $(ls $OUT/res_compiled/ | wc -l)"
 
-echo "=== [2/7] Linking Resources + Generating R.java ==="
+echo "=== [2/7] Linking Resources + R.java ==="
 FLAT_FILES=$(find $OUT/res_compiled -name "*.flat" | tr '\n' ' ')
 $AAPT2 link \
   -o $OUT/resources.apk \
@@ -36,12 +36,10 @@ $AAPT2 link \
 echo "=== [3/7] Compiling R.java ==="
 R_JAVA=$(find $OUT/gen -name "R.java" 2>/dev/null | head -1)
 if [ -n "$R_JAVA" ]; then
-  echo "  Found: $R_JAVA"
-  javac -source 8 -target 8 -classpath "$ANDROID_JAR" -d $OUT/r_classes/ "$R_JAVA" 2>&1
+  javac -source 8 -target 8 -classpath "$ANDROID_JAR" -d $OUT/r_classes/ "$R_JAVA" 2>&1 | grep -v "^\(Note\|warning\)"
   jar cf $OUT/r_classes.jar -C $OUT/r_classes .
-  echo "  R.jar created"
 else
-  echo "  WARNING: R.java not found, skipping"
+  echo "  WARNING: R.java not generated"
   touch $OUT/r_classes.jar
 fi
 
@@ -51,7 +49,7 @@ $KOTLINC \
   -classpath "$ANDROID_JAR:$OUT/r_classes.jar" \
   -jvm-target 1.8 \
   -include-runtime \
-  -d $OUT/classes.jar 2>&1 | grep -v "^w:" | head -50
+  -d $OUT/classes.jar 2>&1 | grep -v "^w:" | head -30
 
 echo "=== [5/7] Stripping multi-release sections ==="
 zip -d $OUT/classes.jar "META-INF/versions/*" > /dev/null 2>&1 || true
@@ -61,13 +59,11 @@ $DX --dex \
   --min-sdk-version=26 \
   --output=$OUT/dex/classes.dex \
   $OUT/classes.jar \
-  $OUT/r_classes.jar 2>&1 | head -30
+  $OUT/r_classes.jar 2>&1 | head -20
 
-echo "=== [7/7] Packaging + Signing APK ==="
+echo "=== [7/7] Packaging + Signing ==="
 cp $OUT/resources.apk $OUT/apk/eyetab-unsigned.apk
-cd $OUT/dex
-zip -u ../apk/eyetab-unsigned.apk classes.dex > /dev/null
-cd -
+cd $OUT/dex && zip -u ../apk/eyetab-unsigned.apk classes.dex > /dev/null && cd -
 
 if [ ! -f /tmp/debug.keystore ]; then
   keytool -genkeypair \
@@ -84,9 +80,8 @@ $APKSIGNER sign \
   --ks-pass pass:android \
   --key-pass pass:android \
   --out $OUT/apk/eyetab-debug.apk \
-  $OUT/apk/eyetab-unsigned.apk 2>&1 | head -10
+  $OUT/apk/eyetab-unsigned.apk 2>&1 | head -5
 
 ls -lh $OUT/apk/eyetab-debug.apk
 echo ""
 echo "=== BUILD SUCCESS ==="
-echo "APK: $(pwd)/$OUT/apk/eyetab-debug.apk"
