@@ -15,44 +15,52 @@ class MainActivity : Activity() {
 
         val root = LinearLayout(this)
         root.orientation = LinearLayout.VERTICAL
-        root.setPadding(48, 80, 48, 48)
+        root.setPadding(48, 48, 48, 48)
 
-        root.addView(text("EyeTab UI BUILD 2026-05-21", 20f))
-        root.addView(text("카메라 권한 상태: 테스트용 표시", 16f))
-        root.addView(text("오버레이 권한 상태: 테스트용 표시", 16f))
-        root.addView(text("접근성 서비스 상태: 테스트용 표시", 16f))
-        root.addView(text("추적 상태: 테스트용 표시", 16f))
-        root.addView(btn("카메라 권한 요청"))
-        root.addView(btn("오버레이 설정 열기"))
-        root.addView(btn("접근성 설정 열기"))
-        root.addView(btn("추적 시작"))
-        root.addView(btn("추적 중지"))
+        val title = TextView(this)
+        title.text = "EyeTab CRASH TEST BUILD 2026-05-21"
+        title.textSize = 26f
+        title.setPadding(0, 0, 0, 32)
 
-        val scroll = ScrollView(this)
-        scroll.addView(root)
-        setContentView(scroll)
-    }
+        val status = TextView(this)
+        status.text = "앱 실행 성공. 현재는 기능을 모두 제거한 테스트 화면입니다."
+        status.textSize = 18f
+        status.setPadding(0, 0, 0, 32)
 
-    private fun text(s: String, size: Float): TextView {
-        val tv = TextView(this)
-        tv.text = s
-        tv.textSize = size
-        tv.setPadding(0, 12, 0, 12)
-        return tv
-    }
-
-    private fun btn(label: String): Button {
-        val b = Button(this)
-        b.text = label
-        val lp = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        lp.topMargin = 8
-        b.layoutParams = lp
-        b.setOnClickListener {
-            Toast.makeText(this, label, Toast.LENGTH_SHORT).show()
+        val cameraButton = Button(this)
+        cameraButton.text = "카메라 권한 버튼 테스트"
+        cameraButton.setOnClickListener {
+            Toast.makeText(this, "카메라 버튼 테스트", Toast.LENGTH_SHORT).show()
         }
-        return b
+
+        val overlayButton = Button(this)
+        overlayButton.text = "오버레이 버튼 테스트"
+        overlayButton.setOnClickListener {
+            Toast.makeText(this, "오버레이 버튼 테스트", Toast.LENGTH_SHORT).show()
+        }
+
+        val accessibilityButton = Button(this)
+        accessibilityButton.text = "접근성 버튼 테스트"
+        accessibilityButton.setOnClickListener {
+            Toast.makeText(this, "접근성 버튼 테스트", Toast.LENGTH_SHORT).show()
+        }
+
+        val startButton = Button(this)
+        startButton.text = "추적 시작 버튼 테스트"
+        startButton.setOnClickListener {
+            Toast.makeText(this, "추적 시작 버튼 테스트", Toast.LENGTH_SHORT).show()
+        }
+
+        root.addView(title)
+        root.addView(status)
+        root.addView(cameraButton)
+        root.addView(overlayButton)
+        root.addView(accessibilityButton)
+        root.addView(startButton)
+
+        val scrollView = ScrollView(this)
+        scrollView.addView(root)
+
+        setContentView(scrollView)
     }
 }

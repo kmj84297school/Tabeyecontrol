@@ -3,13 +3,13 @@ set -e
 
 ANDROID_JAR="/tmp/android-all-34.jar"
 KOTLINC="/opt/kotlinc/bin/kotlinc"
+STDLIB="/opt/kotlinc/lib/kotlin-stdlib.jar"
 DX="/usr/lib/android-sdk/build-tools/debian/dx"
 AAPT2="/usr/lib/android-sdk/build-tools/29.0.3/aapt2"
 APKSIGNER="/usr/lib/android-sdk/build-tools/29.0.3/apksigner"
 
-SRC="src"
-RES="res"
 MANIFEST="AndroidManifest.xml"
+RES="res"
 OUT="build"
 
 rm -rf $OUT
@@ -31,34 +31,38 @@ $AAPT2 link \
   --min-sdk-version 26 \
   --target-sdk-version 34 \
   --java $OUT/gen \
-  $FLAT_FILES 2>&1 | head -20
+  $FLAT_FILES 2>&1 | head -10
 
 echo "=== [3/7] Compiling R.java ==="
 R_JAVA=$(find $OUT/gen -name "R.java" 2>/dev/null | head -1)
 if [ -n "$R_JAVA" ]; then
-  javac -source 8 -target 8 -classpath "$ANDROID_JAR" -d $OUT/r_classes/ "$R_JAVA" 2>&1 | grep -v "^\(Note\|warning\)"
+  javac -source 8 -target 8 -classpath "$ANDROID_JAR" -d $OUT/r_classes/ "$R_JAVA" 2>&1 \
+    | grep -v "^\(Note\|warning\)" || true
   jar cf $OUT/r_classes.jar -C $OUT/r_classes .
 else
-  echo "  WARNING: R.java not generated"
   touch $OUT/r_classes.jar
 fi
 
-echo "=== [4/7] Compiling Kotlin ==="
+echo "=== [4/7] Compiling MainActivity.kt only (no reflect) ==="
 $KOTLINC \
-  $SRC/com/example/eyetab/*.kt \
+  src/com/example/eyetab/MainActivity.kt \
   -classpath "$ANDROID_JAR:$OUT/r_classes.jar" \
   -jvm-target 1.8 \
-  -include-runtime \
-  -d $OUT/classes.jar 2>&1 | grep -v "^w:" | head -30
+  -d $OUT/classes.jar 2>&1 | grep -v "^w:" | head -20
 
 echo "=== [5/7] Stripping multi-release sections ==="
+# Strip from app jar
 zip -d $OUT/classes.jar "META-INF/versions/*" > /dev/null 2>&1 || true
+# Strip module-info from stdlib (only META-INF/versions/9/module-info.class)
+cp "$STDLIB" $OUT/stdlib-stripped.jar
+zip -d $OUT/stdlib-stripped.jar "META-INF/versions/*" > /dev/null 2>&1 || true
 
 echo "=== [6/7] Converting to DEX ==="
 $DX --dex \
   --min-sdk-version=26 \
   --output=$OUT/dex/classes.dex \
   $OUT/classes.jar \
+  $OUT/stdlib-stripped.jar \
   $OUT/r_classes.jar 2>&1 | head -20
 
 echo "=== [7/7] Packaging + Signing ==="
