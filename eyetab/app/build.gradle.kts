@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -17,6 +16,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -36,25 +38,20 @@ android {
     }
 
     buildFeatures {
-        compose = true
+        viewBinding = true
     }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.material)
+    implementation(libs.lifecycle.service)
+    implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.camerax.core)
     implementation(libs.camerax.camera2)
     implementation(libs.camerax.lifecycle)
     implementation(libs.camerax.view)
     implementation(libs.mlkit.face.detection)
-    implementation(libs.lifecycle.service)
-    implementation(libs.guava)
-    debugImplementation(libs.androidx.ui.tooling)
 }

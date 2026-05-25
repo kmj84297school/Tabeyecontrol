@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="EyeTab"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="눈으로 태블릿을 제어합니다"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:paddingBottom="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginVertical="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/permission_camera"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_camera_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status_needed"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/status_fail" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/permission_overlay"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_overlay_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status_needed"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/status_fail" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/permission_accessibility"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_access_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status_needed"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/status_fail" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginVertical="8dp" />
+
+        <Button
+            android:id="@+id/btn_request_camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_request_camera"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/btn_open_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_open_overlay"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btn_open_accessibility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_open_accessibility"
+            android:layout_marginTop="8dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginVertical="12dp" />
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_start"
+            android:textSize="18sp"
+            android:backgroundTint="@color/btn_start"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_stop"
+            android:textSize="18sp"
+            android:backgroundTint="@color/btn_stop"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginVertical="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="사용법:\n• 짧은 눈 깜빡임 (120~600ms) → 탭\n• 긴 눈 감기 (800ms+) → 스크롤\n• 커서가 화면 위 25%일 때 → 위로 스크롤\n• 커서가 화면 아래 25%일 때 → 아래로 스크롤"
+            android:textSize="13sp"
+            android:textColor="#666666" />
+
+    </LinearLayout>
+</ScrollView>

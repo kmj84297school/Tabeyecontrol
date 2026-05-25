@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="eyetab_primary">#1976D2</color>
+    <color name="eyetab_primary_dark">#0D47A1</color>
+    <color name="eyetab_accent">#FF4081</color>
+    <color name="status_ok">#2E7D32</color>
+    <color name="status_fail">#C62828</color>
+    <color name="btn_start">#2E7D32</color>
+    <color name="btn_stop">#B71C1C</color>
+</resources>

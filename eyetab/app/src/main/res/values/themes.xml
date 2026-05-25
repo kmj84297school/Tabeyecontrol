@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.EyeTab" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.EyeTab" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/eyetab_primary</item>
+        <item name="colorPrimaryDark">@color/eyetab_primary_dark</item>
+        <item name="colorAccent">@color/eyetab_accent</item>
+    </style>
 </resources>

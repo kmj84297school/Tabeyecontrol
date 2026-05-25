@@ -2,7 +2,7 @@ package com.example.eyetab
 
 import android.content.Context
 import android.graphics.PixelFormat
-import android.os.Build
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 
 class OverlayCursorManager(private val context: Context) {
 
+    private val tag = "EyeTab"
     private val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     private var cursorView: View? = null
     private val cursorSizePx = (Constants.CURSOR_SIZE_DP * context.resources.displayMetrics.density).toInt()
@@ -26,26 +27,40 @@ class OverlayCursorManager(private val context: Context) {
     }
 
     fun show() {
-        if (cursorView != null) return
-        val v = View(context).apply {
-            background = ContextCompat.getDrawable(context, R.drawable.cursor_circle)
+        try {
+            if (cursorView != null) return
+            val v = View(context).apply {
+                background = ContextCompat.getDrawable(context, R.drawable.cursor_circle)
+            }
+            cursorView = v
+            wm.addView(v, WindowManager.LayoutParams().apply { copyFrom(baseParams) })
+        } catch (e: Exception) {
+            Log.e(tag, "show overlay", e)
+            cursorView = null
         }
-        cursorView = v
-        wm.addView(v, WindowManager.LayoutParams().apply { copyFrom(baseParams) })
     }
 
     fun updatePosition(cx: Float, cy: Float) {
-        val v = cursorView ?: return
-        val params = (v.layoutParams as WindowManager.LayoutParams).apply {
-            x = (cx - cursorSizePx / 2).toInt()
-            y = (cy - cursorSizePx / 2).toInt()
+        try {
+            val v = cursorView ?: return
+            val params = (v.layoutParams as WindowManager.LayoutParams).apply {
+                x = (cx - cursorSizePx / 2).toInt()
+                y = (cy - cursorSizePx / 2).toInt()
+            }
+            wm.updateViewLayout(v, params)
+        } catch (e: Exception) {
+            Log.e(tag, "updatePosition", e)
         }
-        wm.updateViewLayout(v, params)
     }
 
     fun hide() {
-        cursorView?.let {
-            wm.removeView(it)
+        try {
+            cursorView?.let {
+                wm.removeView(it)
+                cursorView = null
+            }
+        } catch (e: Exception) {
+            Log.e(tag, "hide overlay", e)
             cursorView = null
         }
     }
